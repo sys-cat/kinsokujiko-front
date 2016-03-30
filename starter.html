@@ -86,6 +86,10 @@
                   <label for="string">対象文言</label>
                   <textarea class="form-control" id="string" rows="5" placeholder="対象文言を入力してください"></textarea>
                 </div>
+                <div class="form-group">
+                  <label for="string">消しこみ対象<small>カンマ切り</small></label>
+                  <input type="text" class="form-control" id="blacklist">
+                </div>
               </div>
               <div class="box-footer">
                 <button class="btn btn-primary mask">Mask</button>
@@ -118,17 +122,35 @@
     <script src="dist/js/app.min.js"></script>
 
     <script><!--
-    $('#masktext .mask').click(function(){
-      var data = $('#masktext #string').value();
-      var mask = $.ajax({
-        type:'POST',
-        url:"http://localhost:8080/mask",
-        data:data,
-        dataType:"json"
-      }
-      .done(function(res){
-        $('#result').append(res)
-      }))
+    $(function(){
+      $('#masktext .mask').click(function(){
+        var lists = $('#blacklist').val();
+        lists = lists.split(',');
+        var for_mask = $('#masktext #string').val();
+        var request = JSON.stringify({
+          string : for_mask,
+          list : lists,
+          auth : "authorize-key"
+        });
+        console.log(request);
+        var mask = $.ajax({
+          type:'POST',
+          url:"http://localhost:8080/v1/mask/",
+          data:request,
+          dataType:"json",
+          xhrFields: {
+            withCredentials: true
+          },
+        })
+        .done(function(res){
+          //$('#result').append(res);
+          console.log(res);
+        })
+        .fail(function(err){
+          //$('#result').append(err);
+          console.log(err);
+        });
+      });
     });
     --></script>
 
