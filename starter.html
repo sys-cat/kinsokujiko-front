@@ -76,11 +76,20 @@
               <span class="info-box-text">この機能は開発中のものです。</span>
             </div>
           </div>
+          <div class="box box-default">
+            <div class="box-header with-border">
+              <h3 class="box-title">結果</h3>
+            </div>
+            <div class="box-body">
+              <textarea class="form-control" name="" id="masking-result" rows="3"></textarea>
+              <div id="error-message"></div>
+            </div>
+          </div>
           <div class="box box-primary">
             <div class="box-header with-border">
               <h3 class="box-title">マスキングフォーム</h3>
             </div>
-            <form role="form" id="masktext">
+            <div role="form" id="masktext">
               <div class="box-body">
                 <div class="form-group">
                   <label for="string">対象文言</label>
@@ -94,8 +103,10 @@
               <div class="box-footer">
                 <button class="btn btn-primary mask">Mask</button>
               </div>
-            </form>
-            <div class="box-body"><pre id="result"></pre></div>
+            </div>
+            <div class="box-body">
+              <p id="result"></p>
+            </div>
           </div>
         </section><!-- /.content -->
       </div><!-- /.content-wrapper -->
@@ -143,20 +154,22 @@
           },
         })
         .done(function(res){
-          //$('#result').append(res);
-          console.log(res);
+          return res;
         })
         .fail(function(err){
-          //$('#result').append(err);
-          console.log(err);
+          return err;
+        });
+        $.when(mask).done(function(res){
+          $("#error-message").html("");
+          $("#masking-result").val("");
+          if(res.status == "200") {
+            $("#masking-result").val(res.result);
+          } else {
+            $("#error-message").append("<code>"+res.error+"</code>");
+          }
         });
       });
     });
     --></script>
-
-    <!-- Optionally, you can add Slimscroll and FastClick plugins.
-         Both of these plugins are recommended to enhance the
-         user experience. Slimscroll is required when using the
-         fixed layout. -->
   </body>
 </html>
