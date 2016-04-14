@@ -91,7 +91,7 @@
               <h3 class="box-title">レポート一覧</h3>
             </div>
             <div class="box-body">
-              <p id="result"></p>
+              <div id="chart"></div>
             </div>
           </div>
         </section><!-- /.content -->
@@ -109,37 +109,44 @@
 
     </div><!-- ./wrapper -->
 
-    <!-- REQUIRED JS SCRIPTS -->
-
-    <!-- jQuery 2.1.4 -->
     <script src="/plugins/jQuery/jQuery-2.1.4.min.js"></script>
-    <!-- Bootstrap 3.3.5 -->
     <script src="/bootstrap/js/bootstrap.min.js"></script>
-    <!-- AdminLTE App -->
     <script src="/dist/js/app.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
     <script><!--
     $(function(){
-      pass = btoa("test");
-      salt = btoa("012346789abcdefghijklmnopqrstuxz");
-      auth = btoa(pass+","+salt);
-      var request = JSON.stringify({
-        auth : auth
-      });
-      var reports = $.ajax({
-        type:'POST',
-        url:"http://localhost:8080/v1/report/detail/all",
-        data:request,
-        dataType:"json",
-        xhrFields: {
-          withCredentials: true
-        },
-      })
-      .done(function(res){
-        return res;
-      })
-      .fail(function(err){
-        return err;
+      var kpis = [
+        101,
+        102,
+        103,
+        201,
+        202,
+        203,
+        301,
+        302,
+        303
+      ];
+      _.each(kpis, function(kpi){
+        var request = JSON.stringify({
+          id : kpi,
+          environment : "production"
+        });
+        var reports = $.ajax({
+          type:'POST',
+          url:"http://analytics-550909.japaneast.cloudapp.azure.com:8080/event/report",
+          data:request,
+          dataType:"json",
+          xhrFields: {
+            withCredentials: true
+          },
+        })
+        .done(function(res){
+          return res;
+        })
+        .fail(function(err){
+          return err;
+        });
       });
       /*
       $.when(reports).done(function(res){
@@ -151,7 +158,6 @@
         }
       });
       */
-      console.log(reports);
     });
     --></script>
   </body>

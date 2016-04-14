@@ -10,5 +10,24 @@
     <li><a href="./analysis">分析</a></li>
     <li><a href="./mask.html">マスキング</a></li>
   </ul>
+  <div id="target"></div>
+  <script src="https://raw.githubusercontent.com/jashkenas/underscore/master/underscore.js"></script>
+  <script>
+  $(function () {
+    $.ajax({
+      dataType: "text/html",
+      url: "mask.html",
+      success: function(data) {
+        var template = $("#target").html();
+        // テンプレートを定義
+        var compiled = _.map(users, function(user) {
+          return _.template(template, user);
+        });
+        // テンプレート適用
+        $("#show-template").html(compiled);
+      }
+    });
+  });
+  </script>
 </body>
 </html>
