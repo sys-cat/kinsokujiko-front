@@ -113,7 +113,7 @@
     <script src="/bootstrap/js/bootstrap.min.js"></script>
     <script src="/dist/js/app.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
-    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js"></script>
     <script><!--
     $(function(){
       var kpis = [
@@ -127,24 +127,32 @@
         302,
         303
       ];
+      $.support.cors = true;
       _.each(kpis, function(kpi){
         var request = JSON.stringify({
           id : kpi,
           environment : "production"
         });
-        console.log("Get KPI Num is " + kpi);
-        console.log("request paramater is "+request);
         $.ajax({
           type:'POST',
           url:"http://analytics-550909.japaneast.cloudapp.azure.com:8080/event/report",
           data:request,
-          dataType:"json",
-          xhrFields: {
-            withCredentials: true
-          },
+          dataType:"json"
         })
         .done(function(res){
-          console.log(res);
+          console.log("Get KPI Num is " + kpi);
+          console.log("request paramater is "+request);
+          console.log(res)
+          var days = new Array();
+          var value = new Array();
+          if (res.value.length>0) {
+            _.each(res.value, function(day){
+              days.push(day[0]+"/"+day[1]);
+              value.push(day[2]);
+            });
+          }
+          console.log(days);
+          console.log(value);
         })
         .fail(function(err){
           console.log(err);
