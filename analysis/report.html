@@ -132,7 +132,9 @@
           id : kpi,
           environment : "production"
         });
-        var reports = $.ajax({
+        console.log("Get KPI Num is " + kpi);
+        console.log("request paramater is "+request);
+        $.ajax({
           type:'POST',
           url:"http://analytics-550909.japaneast.cloudapp.azure.com:8080/event/report",
           data:request,
@@ -142,10 +144,10 @@
           },
         })
         .done(function(res){
-          return res;
+          console.log(res);
         })
         .fail(function(err){
-          return err;
+          console.log(err);
         });
       });
       /*
